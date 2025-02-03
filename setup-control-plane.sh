@@ -29,14 +29,20 @@ sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/conf
 sudo systemctl restart containerd
 sudo systemctl enable containerd
 
-# Add Kubernetes APT repository
-sudo apt install -y curl apt-transport-https
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo tee /etc/apt/keyrings/kubernetes-apt-keyring.asc
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+# Install dependencies for Kubernetes APT repository
+sudo apt install -y curl apt-transport-https ca-certificates
 
-# Install Kubernetes components
+# Add the official Kubernetes APT repository
+curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+sudo sh -c 'echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list'
+
+# Update package list after adding Kubernetes repository
 sudo apt update
+
+# Install Kubernetes components (kubelet, kubeadm, kubectl)
 sudo apt install -y kubelet kubeadm kubectl
+
+# Mark the Kubernetes packages to hold (to prevent automatic updates)
 sudo apt-mark hold kubelet kubeadm kubectl
 
 # Enable kubelet
