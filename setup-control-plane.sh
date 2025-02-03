@@ -29,21 +29,10 @@ sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/conf
 sudo systemctl restart containerd
 sudo systemctl enable containerd
 
-# Install dependencies for Kubernetes APT repository
-sudo apt install -y curl apt-transport-https ca-certificates
-
-# Add the official Kubernetes APT repository
-curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-sudo sh -c 'echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list'
-
-# Update package list after adding Kubernetes repository
-sudo apt update
-
-# Install Kubernetes components (kubelet, kubeadm, kubectl)
-sudo apt install -y kubelet kubeadm kubectl
-
-# Mark the Kubernetes packages to hold (to prevent automatic updates)
-sudo apt-mark hold kubelet kubeadm kubectl
+# Install Kubernetes components via Snap
+sudo snap install kubeadm --classic
+sudo snap install kubectl --classic
+sudo snap install kubelet --classic
 
 # Enable kubelet
 sudo systemctl enable --now kubelet
