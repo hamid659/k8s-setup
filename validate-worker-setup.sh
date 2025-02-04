@@ -22,7 +22,7 @@ done
 
 # Check required sysctl settings
 SYSCTL_CONF="/etc/sysctl.d/k8s.conf"
-if [[ ! -f "$SYSCTL_CONF" ]] || ! grep -q 'net.ipv4.ip_forward = 1' "$SYSCTL_CONF"; then
+if [[ ! -f "$SYSCTL_CONF" ]] || ! grep -q 'net.ipv4.ip_forward=1' "$SYSCTL_CONF"; then
   echo "❌ Required sysctl settings are missing. Apply them using:"
   echo "echo -e 'net.bridge.bridge-nf-call-iptables=1\nnet.bridge.bridge-nf-call-ip6tables=1\nnet.ipv4.ip_forward=1' | sudo tee $SYSCTL_CONF"
   exit 1
