@@ -8,6 +8,11 @@ sudo swapoff -a
 sudo sed -i '/ swap / s/^/#/' /etc/fstab
 
 # Load necessary kernel modules
+sudo tee /etc/modules-load.d/containerd.conf <<EOF
+overlay
+br_netfilter
+EOF
+
 sudo modprobe overlay
 sudo modprobe br_netfilter
 
@@ -28,7 +33,7 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 
 # Install containerd
 sudo apt update -y 
-sudo apt install -y containerd
+sudo apt install -y containerd.io
 
 # Configure containerd
 sudo mkdir -p /etc/containerd
@@ -38,21 +43,12 @@ sudo systemctl restart containerd
 sudo systemctl enable containerd
 
 # Add Kubernetes APT repository
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo tee /etc/apt/keyrings/kubernetes-apt-keyring.asc
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 # Install Kubernetes components
 sudo apt update
 sudo apt install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 
-# Enable kubelet
-sudo systemctl enable --now kubelet
 
-# Join the worker node to the cluster (Replace with actual command from control plane)
-# Use the token and hash from the control plane
-echo "To join this node to the cluster, run the following command on this worker node:"
-echo "kubeadm join <CONTROL_PLANE_IP>:6443 --token <TOKEN> --discovery-token-ca-cert-hash sha256:<HASH>"
-
-# Output
-echo "Worker node setup complete!"
