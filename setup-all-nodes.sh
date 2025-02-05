@@ -33,7 +33,7 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 
 # Install containerd
 sudo apt update -y 
-sudo apt install -y containerd.io
+sudo apt install -y containerd
 
 # Configure containerd
 sudo mkdir -p /etc/containerd
