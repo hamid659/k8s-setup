@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set environment variable to avoid prompts during package installation
+export DEBIAN_FRONTEND=noninteractive
+
 #Update and Upgrade Ubuntu 
 sudo apt update && sudo apt upgrade -y
 
