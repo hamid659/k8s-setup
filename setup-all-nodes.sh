@@ -22,14 +22,14 @@ net.bridge.bridge-nf-call-iptables=1
 net.bridge.bridge-nf-call-ip6tables=1
 net.ipv4.ip_forward=1
 EOF
-sudo sysctl --system
+sudo sysctl -p /etc/sysctl.d/k8s.conf
 
 #Install Containerd Runtime and dependencies
 sudo apt install -y curl gnupg2 software-properties-common apt-transport-https ca-certificates
 
 #Enable the Docker repository:
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/docker.gpg
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
 # Install containerd
 sudo apt update -y 
