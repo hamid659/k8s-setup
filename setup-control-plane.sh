@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Initialize Kubernetes control plane with Calico network plugin
-sudo kubeadm init --pod-network-cidr=10.10.16.0/24
+sudo kubeadm init #--pod-network-cidr=10.10.16.0/24
 
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
